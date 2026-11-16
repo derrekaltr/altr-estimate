@@ -57,6 +57,20 @@
   .fine { margin-top:28px; color:var(--bone-faint); font-size:.8rem; line-height:1.6; border-top:1px solid var(--ink-line); padding-top:14px; }
   .err { color:var(--warn); font-size:.9rem; margin-top:8px; display:none; }
   .sent-note { color:var(--bone-faint); font-size:.88rem; margin-top:10px; }
+
+  /* ---- desktop: token-file spec (1060px column, 48px side padding, h1 up to 76px) ---- */
+  @media (min-width: 900px) {
+    .wrap { max-width:var(--page-max, 1060px); padding:56px 48px 140px; }
+    h1 { font-size:clamp(42px, 6.6vw, 76px); max-width:17ch; }
+    h2 { margin-top:72px; }
+    .tag, .steps, .qualify, details, .fine, .refbar { max-width:760px; }
+    fieldset { display:grid; grid-template-columns:1fr 1fr; gap:2px 56px; align-items:start; }
+    legend, fieldset > label.q { grid-column:1 / -1; }
+    .fgrid { display:grid; grid-template-columns:1fr 1fr; gap:2px 40px; }
+    select, input[type=number], input[type=text], input[type=email], input[type=tel] { max-width:none; }
+    .card { max-width:860px; padding:32px 36px; }
+    .range { font-size:56px; }
+  }
 </style>
 </head>
 <body>
@@ -91,14 +105,14 @@
   <form id="estform" onsubmit="return false">
   <fieldset>
     <legend>Your business</legend>
-    <label class="q" for="status">Status</label>
-    <select id="status"><option value="operating">Operating</option><option value="winding">Winding down</option><option value="closed">Closed / dissolved</option></select>
-    <label class="q" for="employees">Peak number of employees</label>
-    <input type="number" id="employees" min="1" value="25" inputmode="numeric">
-    <label class="q" for="years">Years of digital records</label>
-    <input type="number" id="years" min="0" value="5" inputmode="numeric">
-    <label class="q" for="region">Headquarters / records language</label>
-    <select id="region"><option value="core">US, UK, or Canada — English records</option><option value="other">Elsewhere / non-English records</option></select>
+    <div class="f"><label class="q" for="status">Status</label>
+    <select id="status"><option value="operating">Operating</option><option value="winding">Winding down</option><option value="closed">Closed / dissolved</option></select></div>
+    <div class="f"><label class="q" for="employees">Peak number of employees</label>
+    <input type="number" id="employees" min="1" value="25" inputmode="numeric"></div>
+    <div class="f"><label class="q" for="years">Years of digital records</label>
+    <input type="number" id="years" min="0" value="5" inputmode="numeric"></div>
+    <div class="f"><label class="q" for="region">Headquarters / records language</label>
+    <select id="region"><option value="core">US, UK, or Canada — English records</option><option value="other">Elsewhere / non-English records</option></select></div>
   </fieldset>
 
   <fieldset>
@@ -111,12 +125,12 @@
     <label class="chk"><input type="checkbox" class="cat" value="finance"> Finance / accounting (QuickBooks, Xero)</label>
     <label class="chk"><input type="checkbox" class="cat" value="code"> Code repositories</label>
     <label class="chk"><input type="checkbox" class="cat" value="industry"> Industry systems (EMR, WMS, dispatch, billing)</label>
-    <label class="q" for="domain">Line of work</label>
+    <div class="f"><label class="q" for="domain">Line of work</label>
     <select id="domain">
       <option value="specialist">Regulated / specialist (clinical, legal, finance, niche logistics)</option>
       <option value="standard" selected>Standard business</option>
       <option value="generic">Generic / commodity</option>
-    </select>
+    </select></div>
     <label class="chk" style="margin-top:12px"><input type="checkbox" id="workflows"> Complete workflow chains exist (ticket→resolution, full project lifecycles)</label>
     <label class="chk"><input type="checkbox" id="txflow"> E-commerce, POS or transaction flow (ongoing sales data)</label>
   </fieldset>
@@ -142,14 +156,16 @@
   <div class="card" id="interest">
     <h2 style="margin-top:0">Want real quotes? Takes 30 seconds.</h2>
     <p style="color:var(--sub);font-size:.95rem;margin:0 0 6px">A human reviews every submission — no bots, no spam. We only reach out about this.</p>
-    <label class="q" for="bizname">Business name</label>
-    <input type="text" id="bizname" autocomplete="organization" placeholder="Acme Logistics LLC">
-    <label class="q" for="yourname">Your name</label>
-    <input type="text" id="yourname" autocomplete="name" placeholder="Jane Smith">
-    <label class="q" for="email">Email</label>
-    <input type="email" id="email" autocomplete="email" placeholder="jane@acme.com">
-    <label class="q" for="phone">Phone</label>
-    <input type="tel" id="phone" autocomplete="tel" placeholder="(555) 010-0199">
+    <div class="fgrid">
+    <div class="f"><label class="q" for="bizname">Business name</label>
+    <input type="text" id="bizname" autocomplete="organization" placeholder="Acme Logistics LLC"></div>
+    <div class="f"><label class="q" for="yourname">Your name</label>
+    <input type="text" id="yourname" autocomplete="name" placeholder="Jane Smith"></div>
+    <div class="f"><label class="q" for="email">Email</label>
+    <input type="email" id="email" autocomplete="email" placeholder="jane@acme.com"></div>
+    <div class="f"><label class="q" for="phone">Phone</label>
+    <input type="tel" id="phone" autocomplete="tel" placeholder="(555) 010-0199"></div>
+    </div>
     <div class="consentbox">
       <input type="checkbox" id="consent">
       <label for="consent" id="consentText"></label>
