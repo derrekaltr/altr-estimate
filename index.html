@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What is your business's data worth? — ALTR</title>
+<meta name="description" content="AI companies license real businesses' work records. Get a free 2-minute indicative estimate — no commitment, nothing sent until you say so.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#1c1117; --sub:#655a60; --line:#eee3e8; --accent:#b8336a; --accent-ink:#6b1d3e; --accent2:#fdf2f7; --warn:#92400e; --warnbg:#fffbeb; --ground:#fbf7f8; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:"DM Sans", Inter, system-ui, sans-serif; color:var(--ink); background:var(--ground); font-size:16px; line-height:1.5; }
+  .wrap { max-width:640px; margin:0 auto; padding:28px 20px 96px; }
+  header.site { display:flex; align-items:center; gap:10px; margin-bottom:28px; }
+  header.site svg { width:22px; height:22px; }
+  header.site .name { font-weight:700; font-size:15px; }
+  header.site .name span { display:block; font-size:12px; color:var(--sub); font-weight:400; }
+  .refbar { display:none; background:var(--accent2); color:var(--accent-ink); border:1px solid var(--line); border-radius:8px; padding:9px 14px; font-size:.9rem; margin-bottom:20px; }
+  h1 { font-size:1.85rem; line-height:1.18; letter-spacing:-0.02em; margin:0 0 10px; font-weight:700; }
+  .tag { color:var(--sub); margin:0 0 30px; }
+  h2 { font-size:1.05rem; margin:34px 0 10px; }
+  .steps { counter-reset:s; padding:0; margin:0 0 6px; list-style:none; }
+  .steps li { counter-increment:s; display:flex; gap:12px; margin:10px 0; }
+  .steps li::before { content:counter(s); flex:none; width:24px; height:24px; border-radius:50%; background:var(--accent2); color:var(--accent-ink); font-weight:600; font-size:.85rem; display:inline-flex; align-items:center; justify-content:center; margin-top:1px; }
+  .qualify { border:1px solid var(--line); border-radius:12px; background:#fff; padding:16px 18px; font-size:.95rem; }
+  .qualify ul { margin:8px 0 0; padding-left:18px; }
+  fieldset { border:none; border-top:1px solid var(--line); padding:22px 0; margin:0; }
+  legend { font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); padding-right:12px; }
+  label.q { display:block; margin:13px 0 5px; }
+  select, input[type=number], input[type=text], input[type=email], input[type=tel] { font:inherit; padding:10px 12px; border:1px solid var(--line); border-radius:8px; background:#fff; width:100%; max-width:340px; }
+  .chk { display:block; margin:8px 0; font-size:.95rem; }
+  .chk input { margin-right:8px; accent-color:var(--accent); }
+  button { font-family:inherit; font-size:1rem; background:var(--accent); color:#fff; border:none; border-radius:8px; padding:14px 26px; cursor:pointer; margin-top:22px; }
+  button.sec { background:#fff; color:var(--accent); border:1px solid var(--accent); padding:9px 16px; font-size:.9rem; margin:10px 8px 0 0; }
+  .card { display:none; margin-top:30px; border:1px solid var(--line); border-radius:12px; background:#fff; padding:24px; }
+  .range { font-size:2rem; color:var(--accent); margin:4px 0 2px; font-weight:600; }
+  .rangehead { font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); }
+  .flag { background:var(--warnbg); color:var(--warn); border-radius:8px; padding:9px 13px; margin:9px 0 0; font-size:.9rem; }
+  .note { background:var(--accent2); border-radius:8px; padding:9px 13px; margin:10px 0 0; font-size:.9rem; }
+  textarea { width:100%; height:110px; font:.8rem/1.4 Menlo, monospace; border:1px solid var(--line); border-radius:8px; padding:10px; margin-top:8px; }
+  .consentbox { border:1px solid var(--line); border-radius:8px; background:var(--ground); padding:12px 14px; margin:14px 0 4px; font-size:.92rem; display:flex; gap:10px; align-items:flex-start; }
+  .consentbox input { margin-top:3px; accent-color:var(--accent); flex:none; }
+  .consentver { color:var(--sub); font-size:.78rem; margin-top:4px; }
+  details { border-top:1px solid var(--line); padding:13px 0; }
+  details:last-of-type { border-bottom:1px solid var(--line); }
+  summary { cursor:pointer; font-weight:500; }
+  details p { color:var(--sub); font-size:.95rem; margin:8px 0 0; }
+  .fine { margin-top:28px; color:var(--sub); font-size:.8rem; line-height:1.55; border-top:1px solid var(--line); padding-top:14px; }
+  .err { color:#c4242a; font-size:.9rem; margin-top:8px; display:none; }
+  .sent-note { color:var(--sub); font-size:.88rem; margin-top:10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="site">
+    <svg viewBox="0 0 24 24" fill="none" style="stroke:var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 21V11"/><path d="M12 11 6.5 4.5"/><path d="M12 11l5.5-6.5"/>
+      <circle cx="6.5" cy="4" r="1.6" style="fill:var(--accent);stroke:none"/><circle cx="17.5" cy="4" r="1.6" style="fill:var(--accent);stroke:none"/><circle cx="12" cy="21" r="1.6" style="fill:var(--accent);stroke:none"/>
+    </svg>
+    <span class="name">ALTR<span>Data licensing referrals</span></span>
+  </header>
+
+  <div class="refbar" id="refbar"></div>
+
+  <h1>AI companies license real businesses' work records. Find out what yours could be worth.</h1>
+  <p class="tag">Free · about 2 minutes · no commitment. Your answers stay in your browser — nothing is sent anywhere until you choose to send it.</p>
+
+  <h2>How it works</h2>
+  <ol class="steps">
+    <li>Answer a few anonymous questions about your business and its records.</li>
+    <li>Get an instant indicative range from public market benchmarks.</li>
+    <li>Want real quotes? Send us your code and a human runs 2–4 buyers in parallel for you — you compare written indications and only sign what you like.</li>
+  </ol>
+
+  <h2>What tends to qualify</h2>
+  <div class="qualify">
+    Buyers pay most for operating businesses with <strong>3+ years of digital records</strong> — email, tickets, CRM, documents, code, industry systems. Larger teams command more, but:
+    <ul>
+      <li>Smaller or newer businesses still have routes — we'll tell you which.</li>
+      <li>Closed or winding-down businesses are often the <em>fastest</em> deals.</li>
+      <li>Everything is licensed de-identified. You keep ownership. You can always say no.</li>
+    </ul>
+  </div>
+
+  <form id="estform" onsubmit="return false">
+  <fieldset>
+    <legend>Your business</legend>
+    <label class="q" for="status">Status</label>
+    <select id="status"><option value="operating">Operating</option><option value="winding">Winding down</option><option value="closed">Closed / dissolved</option></select>
+    <label class="q" for="employees">Peak number of employees</label>
+    <input type="number" id="employees" min="1" value="25" inputmode="numeric">
+    <label class="q" for="years">Years of digital records</label>
+    <input type="number" id="years" min="0" value="5" inputmode="numeric">
+    <label class="q" for="region">Headquarters / records language</label>
+    <select id="region"><option value="core">US, UK, or Canada — English records</option><option value="other">Elsewhere / non-English records</option></select>
+  </fieldset>
+
+  <fieldset>
+    <legend>The records</legend>
+    <label class="q">Which hold 3+ years of history? (check all)</label>
+    <label class="chk"><input type="checkbox" class="cat" value="comms"> Conversations (email, Slack/Teams)</label>
+    <label class="chk"><input type="checkbox" class="cat" value="tickets"> Tickets &amp; tasks (help desk, Jira/Asana)</label>
+    <label class="chk"><input type="checkbox" class="cat" value="crm"> CRM / sales records</label>
+    <label class="chk"><input type="checkbox" class="cat" value="docs"> Documents &amp; wikis (Drive, Notion)</label>
+    <label class="chk"><input type="checkbox" class="cat" value="finance"> Finance / accounting (QuickBooks, Xero)</label>
+    <label class="chk"><input type="checkbox" class="cat" value="code"> Code repositories</label>
+    <label class="chk"><input type="checkbox" class="cat" value="industry"> Industry systems (EMR, WMS, dispatch, billing)</label>
+    <label class="q" for="domain">Line of work</label>
+    <select id="domain">
+      <option value="specialist">Regulated / specialist (clinical, legal, finance, niche logistics)</option>
+      <option value="standard" selected>Standard business</option>
+      <option value="generic">Generic / commodity</option>
+    </select>
+    <label class="chk" style="margin-top:12px"><input type="checkbox" id="workflows"> Complete workflow chains exist (ticket→resolution, full project lifecycles)</label>
+    <label class="chk"><input type="checkbox" id="txflow"> E-commerce, POS or transaction flow (ongoing sales data)</label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Quick rights check</legend>
+    <label class="chk"><input type="checkbox" id="thirdparty"> Significant third-party confidential material (client files under NDA, vendor data)</label>
+    <label class="chk"><input type="checkbox" id="calls"> Call recordings made <em>without</em> AI-training consent</label>
+    <label class="chk"><input type="checkbox" id="pii"> Customer personal info that can't be cleanly de-identified</label>
+    <label class="chk"><input type="checkbox" id="eu"> EU/UK customers or contacts appear in the data</label>
+  </fieldset>
+
+  <button id="estBtn" onclick="runEstimate()">Get my free estimate</button>
+  </form>
+
+  <div class="card" id="result">
+    <div class="rangehead" id="rangehead">Indicative range</div>
+    <div class="range" id="range"></div>
+    <div id="explain" style="color:var(--sub);font-size:.95rem"></div>
+    <div id="flags"></div>
+  </div>
+
+  <div class="card" id="interest">
+    <h2 style="margin-top:0">Want real quotes? Takes 30 seconds.</h2>
+    <p style="color:var(--sub);font-size:.95rem;margin:0 0 6px">A human reviews every submission — no bots, no spam. We only reach out about this.</p>
+    <label class="q" for="bizname">Business name</label>
+    <input type="text" id="bizname" autocomplete="organization" placeholder="Acme Logistics LLC">
+    <label class="q" for="yourname">Your name</label>
+    <input type="text" id="yourname" autocomplete="name" placeholder="Jane Smith">
+    <label class="q" for="email">Email</label>
+    <input type="email" id="email" autocomplete="email" placeholder="jane@acme.com">
+    <label class="q" for="phone">Phone</label>
+    <input type="tel" id="phone" autocomplete="tel" placeholder="(555) 010-0199">
+    <div class="consentbox">
+      <input type="checkbox" id="consent">
+      <label for="consent" id="consentText"></label>
+    </div>
+    <div class="consentver" id="consentVer"></div>
+    <div class="err" id="interestErr"></div>
+    <button onclick="makeCode()">Create my code</button>
+  </div>
+
+  <div class="card" id="codeout">
+    <h2 style="margin-top:0">Your lead code</h2>
+    <p style="color:var(--sub);font-size:.95rem;margin:0">This code holds your answers. <strong>Nothing has been sent yet</strong> — it goes to a human only when you send it one of these ways:</p>
+    <textarea id="codebox" readonly></textarea>
+    <button class="sec" id="copyBtn" onclick="copyCode()">Copy code</button>
+    <a id="mailBtn"><button class="sec" type="button">Email it instead</button></a>
+    <p class="sent-note" id="sendHint"></p>
+  </div>
+
+  <h2>Questions people ask</h2>
+  <details><summary>Is this legit?</summary><p>AI companies pay to license historical business records to train models — micro1, OpenTrain, Nyne and others publish their programs. We're a referral service: we shop your profile to several buyers at once so you get competing written indications instead of one take-it-or-leave-it number.</p></details>
+  <details><summary>What does it cost me?</summary><p>Nothing, ever. We're paid a referral fee by the buyer side when a deal closes. If no deal closes, nobody pays anything.</p></details>
+  <details><summary>Who sees my information?</summary><p>Until you send your code, nobody — this page stores nothing and sends nothing. After you send it, one operator reviews it. Your contact details are only shared with a buyer after you've confirmed on a call that you want quotes.</p></details>
+  <details><summary>What happens after I send my code?</summary><p>A human calls or emails you, usually within 2 business days, walks through the details, and — only if you want to proceed — submits your profile to 2–4 buyers in parallel. You compare their written indications and sign only what you like.</p></details>
+  <details><summary>Do I have to sell everything? Is it exclusive?</summary><p>No. You choose what's in scope, everything is licensed de-identified, and we advise never signing anyone's exclusivity letter until all indications are in — it's your main leverage.</p></details>
+  <details><summary>How is the person who shared this link involved?</summary><p>Creators who share this page are paid partners: if a deal closes from their referral, they receive a share of our referral fee. It costs you nothing and doesn't change your numbers.</p></details>
+
+  <div class="fine">
+    <strong>This is an estimate, not an offer.</strong> It is computed only from the answers above,
+    using published market benchmarks (micro1 payment tiers, OpenTrain and Nyne stated ranges,
+    dead-company archive comparables). Actual offers come from buyers after their own review, and may
+    differ materially or not be made at all. Nothing here is a commitment by anyone to pay anything.
+    Exclusivity, which can raise prices, is intentionally excluded from this number.
+    <br><br>
+    Privacy: this page runs entirely in your browser. It sets no cookies, uses no analytics, and
+    transmits nothing. Your answers leave your device only inside the code you choose to send.
+  </div>
+</div>
+
+<script src="engine.js"></script>
+<script>
+/* Set this to your monitored ops inbox before publishing. */
+var OPS_EMAIL = 'derrek@altrmgmt.com';
+
+var lastEst = null, lastX = null, lastLane = null;
+
+/* ---- creator attribution: ?c=handle (or #c=handle), kept across refresh ---- */
+function creatorHandle() {
+  var m = location.search.match(/[?&]c=([^&]+)/) || location.hash.match(/[#&]c=([^&]+)/);
+  var h = m ? decodeURIComponent(m[1]) : '';
+  try {
+    if (h) sessionStorage.setItem('altr_c', h);
+    else h = sessionStorage.getItem('altr_c') || '';
+  } catch (e) {}
+  return h.replace(/^@/, '');
+}
+var refHandle = creatorHandle();
+if (refHandle) {
+  var rb = document.getElementById('refbar');
+  rb.style.display = 'block';
+  rb.textContent = 'Referred by @' + refHandle + ' — a paid partner of ALTR. Your numbers are not affected.';
+}
+
+document.getElementById('consentText').textContent = ALTR.CONSENT.text;
+document.getElementById('consentVer').textContent = 'Consent wording version ' + ALTR.CONSENT.ver + ' — recorded with your submission.';
+
+function readAnswers() {
+  var g = function (id) { return document.getElementById(id); };
+  var catList = Array.prototype.map.call(document.querySelectorAll('.cat:checked'), function (c) { return c.value; });
+  return {
+    status: g('status').value,
+    emp: +g('employees').value || 0,
+    yrs: +g('years').value || 0,
+    region: g('region').value,
+    cats: catList.length, catList: catList,
+    domain: g('domain').value,
+    workflows: g('workflows').checked, txflow: g('txflow').checked,
+    thirdparty: g('thirdparty').checked, calls: g('calls').checked,
+    pii: g('pii').checked, eu: g('eu').checked
+  };
+}
+
+function runEstimate() {
+  lastX = readAnswers();
+  lastEst = ALTR.estimate(lastX);
+  lastLane = ALTR.route(lastX, lastEst);
+  var res = document.getElementById('result');
+  var head = document.getElementById('rangehead'), range = document.getElementById('range');
+  var explain = document.getElementById('explain'), flags = document.getElementById('flags');
+  res.style.display = 'block';
+  flags.innerHTML = lastEst.flags.map(function (x) { return '<div class="flag">⚠️ ' + x + '</div>'; }).join('') +
+                    lastEst.notes.map(function (x) { return '<div class="note">' + x + '</div>'; }).join('');
+  if (lastEst.blocked) {
+    head.textContent = 'One thing to resolve first';
+    range.textContent = '—';
+    explain.textContent = 'Your data includes EU/UK contacts, which brings European privacy law into play. That needs a specialist look before anyone can quote it. You can still leave your details below and we\'ll come back to you on next steps rather than guess.';
+  } else if (lastEst.routed) {
+    head.textContent = 'Below the big buyers\' floors — but there are routes';
+    range.textContent = lastEst.hi ? 'up to ' + ALTR.fmt(lastEst.hi) : '—';
+    explain.textContent = 'Straight answer: at this size or history, you\'re under the floors most AI-training buyers set. Real options remain — smaller buyers, archive buyers, or a 12-month recheck. Leave your details and we\'ll tell you which applies.';
+  } else {
+    head.textContent = 'Indicative range (non-exclusive)';
+    range.textContent = ALTR.fmt(lastEst.lo) + ' – ' + ALTR.fmt(lastEst.hi);
+    explain.textContent = 'An estimate from market benchmarks, not an offer — real numbers come from buyers after their review.';
+  }
+  document.getElementById('interest').style.display = 'block';
+  document.getElementById('codeout').style.display = 'none';
+  res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function makeCode() {
+  var g = function (id) { return document.getElementById(id); };
+  var err = g('interestErr');
+  err.style.display = 'none';
+  if (!lastEst) { runEstimate(); }
+  var biz = g('bizname').value.trim(), name = g('yourname').value.trim();
+  var email = g('email').value.trim(), phone = g('phone').value.trim();
+  if (!biz || !name || !email) { err.textContent = 'Business name, your name, and email are needed so a human can follow up.'; err.style.display = 'block'; return; }
+  if (!g('consent').checked) { err.textContent = 'The consent box is required — we can\'t refer you to buyers without it.'; err.style.display = 'block'; return; }
+  var payload = {
+    v: 1, t: 'lead', ts: new Date().toISOString(),
+    biz: biz, name: name, email: email, phone: phone,
+    creator: refHandle ? '@' + refHandle : '', attrib: refHandle ? 'Public link' : 'Direct',
+    consent: { ts: new Date().toISOString(), ver: ALTR.CONSENT.ver, method: 'public-form' },
+    answers: lastX, est: { lo: lastEst.lo, hi: lastEst.hi, routed: lastEst.routed, blocked: lastEst.blocked },
+    lane: lastLane
+  };
+  var code = ALTR.encodeLead(payload);
+  g('codebox').value = code;
+  g('mailBtn').href = 'mailto:' + OPS_EMAIL + '?subject=' + encodeURIComponent('ALTR lead code — ' + biz) + '&body=' + encodeURIComponent(code);
+  g('sendHint').textContent = refHandle
+    ? 'Fastest route: copy the code and DM it to @' + refHandle + ' — they\'ll pass it straight to the team.'
+    : 'Copy the code and send it to whoever shared this page with you, or email it with the button above.';
+  g('codeout').style.display = 'block';
+  g('codeout').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function copyCode() {
+  var t = document.getElementById('codebox');
+  t.select(); t.setSelectionRange(0, 99999);
+  try { navigator.clipboard.writeText(t.value); } catch (e) { document.execCommand('copy'); }
+  var b = document.getElementById('copyBtn'); b.textContent = 'Copied ✓';
+  setTimeout(function () { b.textContent = 'Copy code'; }, 1600);
+}
+</script>
+</body>
+</html>
