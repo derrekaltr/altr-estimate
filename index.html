@@ -105,6 +105,7 @@
   <h1>AI companies license real businesses' work records. Find out what yours could be worth.</h1>
   <p class="tag">Free · about 2 minutes · no commitment. Your answers stay in your browser — nothing is sent anywhere until you choose to send it.</p>
 
+  <div id="introSecs">
   <h2>How it works</h2>
   <ol class="steps">
     <li>Answer a few anonymous questions about your business and its records.</li>
@@ -120,6 +121,7 @@
       <li>Closed or winding-down businesses are often the <em>fastest</em> deals.</li>
       <li>Everything is licensed de-identified. You keep ownership. You can always say no.</li>
     </ul>
+  </div>
   </div>
 
   <button id="estBtn" onclick="startWizard()">Get my free estimate</button>
@@ -244,6 +246,7 @@
     <p class="sent-note" id="sendHint"></p>
   </div>
 
+  <div id="faqSecs">
   <h2>Questions people ask</h2>
   <details><summary>Is this legit?</summary><p>AI companies pay to license historical business records to train models — micro1, OpenTrain, Nyne and others publish their programs. We're a referral service: we shop your profile to several buyers at once so you get competing written indications instead of one take-it-or-leave-it number.</p></details>
   <details><summary>What does it cost me?</summary><p>Nothing, ever. We're paid a referral fee by the buyer side when a deal closes. If no deal closes, nobody pays anything.</p></details>
@@ -261,6 +264,7 @@
     <br><br>
     Privacy: this page runs entirely in your browser. It sets no cookies, uses no analytics, and
     transmits nothing. Your answers leave your device only inside the code you choose to send.
+  </div>
   </div>
 </div>
 
@@ -313,6 +317,9 @@ function wizEls() { return wizSteps || (wizSteps = Array.prototype.slice.call(do
 function startWizard() {
   document.getElementById('estBtn').style.display = 'none';
   document.getElementById('wizard').style.display = 'block';
+  /* a step should be the only thing on screen — intro and FAQ come back with the estimate */
+  document.getElementById('introSecs').style.display = 'none';
+  document.getElementById('faqSecs').style.display = 'none';
   ['result','interest','codeout'].forEach(function (id) { document.getElementById(id).style.display = 'none'; });
   showWizStep(0);
 }
@@ -340,11 +347,13 @@ function stepNext() {
 }
 function editAnswers() {
   ['result','interest','codeout'].forEach(function (id) { document.getElementById(id).style.display = 'none'; });
+  document.getElementById('faqSecs').style.display = 'none';
   document.getElementById('wizard').style.display = 'block';
   showWizStep(0);
 }
 
 function runEstimate() {
+  document.getElementById('faqSecs').style.display = 'block'; /* FAQ is relevant again next to the result */
   lastX = readAnswers();
   lastEst = ALTR.estimate(lastX);
   lastLane = ALTR.route(lastX, lastEst);
