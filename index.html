@@ -61,6 +61,21 @@
   .err { color:#c4242a; font-size:.9rem; margin-top:8px; display:none; }
   .sent-note { color:var(--sub); font-size:.88rem; margin-top:10px; }
 
+  /* ---- step wizard ---- */
+  .step { display:none; }
+  .step.active { display:block; animation:stepin .28s ease; }
+  @keyframes stepin { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+  .step h3 { font-size:1.4rem; line-height:1.2; letter-spacing:-0.015em; margin:22px 0 8px; }
+  .why { color:var(--sub); font-size:.96rem; line-height:1.55; margin:0 0 4px; }
+  .step fieldset { border-top:0; padding-top:14px; }
+  .progress-wrap { display:flex; align-items:center; gap:12px; margin-top:28px; }
+  .progress-track { flex:1; height:6px; background:#f3e0ea; border-radius:99px; overflow:hidden; }
+  .progress-bar { height:100%; width:0; background:linear-gradient(90deg, #c93e79, #a82c60); border-radius:99px; transition:width .25s ease; }
+  .progress-text { font-size:.78rem; color:var(--sub); white-space:nowrap; }
+  .wiznav { display:flex; gap:12px; align-items:center; }
+  .wiznav #nextBtn { flex:1; max-width:380px; margin-top:12px; }
+  .wiznav .sec { width:auto; margin:12px 0 0; }
+
   /* ---- desktop: wider column, form fields two-across (layout only, same look) ---- */
   @media (min-width: 900px) {
     .wrap { max-width:920px; padding:48px 48px 120px; }
@@ -107,48 +122,87 @@
     </ul>
   </div>
 
+  <button id="estBtn" onclick="startWizard()">Get my free estimate</button>
+
   <form id="estform" onsubmit="return false">
-  <fieldset>
-    <legend>Your business</legend>
-    <div class="f"><label class="q" for="status">Status</label>
-    <select id="status"><option value="operating">Operating</option><option value="winding">Winding down</option><option value="closed">Closed / dissolved</option></select></div>
-    <div class="f"><label class="q" for="employees">Peak number of employees</label>
-    <input type="number" id="employees" min="1" value="25" inputmode="numeric"></div>
-    <div class="f"><label class="q" for="years">Years of digital records</label>
-    <input type="number" id="years" min="0" value="5" inputmode="numeric"></div>
-    <div class="f"><label class="q" for="region">Headquarters / records language</label>
-    <select id="region"><option value="core">US, UK, or Canada — English records</option><option value="other">Elsewhere / non-English records</option></select></div>
-  </fieldset>
+  <div id="wizard" style="display:none">
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-bar" id="progBar"></div></div><span class="progress-text" id="progText"></span></div>
 
-  <fieldset>
-    <legend>The records</legend>
-    <label class="q">Which hold 3+ years of history? (check all)</label>
-    <label class="chk"><input type="checkbox" class="cat" value="comms"> Conversations (email, Slack/Teams)</label>
-    <label class="chk"><input type="checkbox" class="cat" value="tickets"> Tickets &amp; tasks (help desk, Jira/Asana)</label>
-    <label class="chk"><input type="checkbox" class="cat" value="crm"> CRM / sales records</label>
-    <label class="chk"><input type="checkbox" class="cat" value="docs"> Documents &amp; wikis (Drive, Notion)</label>
-    <label class="chk"><input type="checkbox" class="cat" value="finance"> Finance / accounting (QuickBooks, Xero)</label>
-    <label class="chk"><input type="checkbox" class="cat" value="code"> Code repositories</label>
-    <label class="chk"><input type="checkbox" class="cat" value="industry"> Industry systems (EMR, WMS, dispatch, billing)</label>
-    <div class="f"><label class="q" for="domain">Line of work</label>
-    <select id="domain">
-      <option value="specialist">Regulated / specialist (clinical, legal, finance, niche logistics)</option>
-      <option value="standard" selected>Standard business</option>
-      <option value="generic">Generic / commodity</option>
-    </select></div>
-    <label class="chk" style="margin-top:12px"><input type="checkbox" id="workflows"> Complete workflow chains exist (ticket→resolution, full project lifecycles)</label>
-    <label class="chk"><input type="checkbox" id="txflow"> E-commerce, POS or transaction flow (ongoing sales data)</label>
-  </fieldset>
+    <section class="step" data-title="The basics">
+      <h3>Is the business running today?</h3>
+      <p class="why">Operating, winding-down and closed businesses all qualify — just with different buyers. Closed companies are often the <em>fastest</em> deals, because the archive is complete and nothing is still changing.</p>
+      <fieldset>
+      <div class="f"><label class="q" for="status">Status</label>
+      <select id="status"><option value="operating">Operating</option><option value="winding">Winding down</option><option value="closed">Closed / dissolved</option></select></div>
+      </fieldset>
+    </section>
 
-  <fieldset>
-    <legend>Quick rights check</legend>
-    <label class="chk"><input type="checkbox" id="thirdparty"> Significant third-party confidential material (client files under NDA, vendor data)</label>
-    <label class="chk"><input type="checkbox" id="calls"> Call recordings made <em>without</em> AI-training consent</label>
-    <label class="chk"><input type="checkbox" id="pii"> Customer personal info that can't be cleanly de-identified</label>
-    <label class="chk"><input type="checkbox" id="eu"> EU/UK customers or contacts appear in the data</label>
-  </fieldset>
+    <section class="step" data-title="Size and history">
+      <h3>How big, and how far back do the records go?</h3>
+      <p class="why">These two numbers matter most. Buyers set minimums on record depth — <strong>3+ years</strong> is the key threshold — and a larger peak team usually means richer records and bigger offers. Use your <em>peak</em> headcount, even if you're smaller now.</p>
+      <fieldset>
+      <div class="f"><label class="q" for="employees">Peak number of employees</label>
+      <input type="number" id="employees" min="1" value="25" inputmode="numeric"></div>
+      <div class="f"><label class="q" for="years">Years of digital records</label>
+      <input type="number" id="years" min="0" value="5" inputmode="numeric"></div>
+      </fieldset>
+      <div class="err" id="sizeErr">Both numbers are needed — your best estimate is fine.</div>
+    </section>
 
-  <button id="estBtn" onclick="runEstimate()">Get my free estimate</button>
+    <section class="step" data-title="Where you operate">
+      <h3>Where is the business based?</h3>
+      <p class="why">Most buyers currently prioritize US, UK and Canadian businesses with English-language records. Based elsewhere? You can still qualify — the ranges just run lower for now, and we'll tell you honestly.</p>
+      <fieldset>
+      <div class="f"><label class="q" for="region">Headquarters / records language</label>
+      <select id="region"><option value="core">US, UK, or Canada — English records</option><option value="other">Elsewhere / non-English records</option></select></div>
+      </fieldset>
+    </section>
+
+    <section class="step" data-title="Your records">
+      <h3>Which systems hold 3+ years of history?</h3>
+      <p class="why">This is the heart of it. A single system is worth something — but <strong>linked history across several</strong> (email + tickets + CRM + documents) is what buyers pay a premium for, because it shows how real work actually got done. Check everything that applies; more is better.</p>
+      <fieldset>
+      <label class="chk"><input type="checkbox" class="cat" value="comms"> Conversations (email, Slack/Teams)</label>
+      <label class="chk"><input type="checkbox" class="cat" value="tickets"> Tickets &amp; tasks (help desk, Jira/Asana)</label>
+      <label class="chk"><input type="checkbox" class="cat" value="crm"> CRM / sales records</label>
+      <label class="chk"><input type="checkbox" class="cat" value="docs"> Documents &amp; wikis (Drive, Notion)</label>
+      <label class="chk"><input type="checkbox" class="cat" value="finance"> Finance / accounting (QuickBooks, Xero)</label>
+      <label class="chk"><input type="checkbox" class="cat" value="code"> Code repositories</label>
+      <label class="chk"><input type="checkbox" class="cat" value="industry"> Industry systems (EMR, WMS, dispatch, billing)</label>
+      </fieldset>
+    </section>
+
+    <section class="step" data-title="The work itself">
+      <h3>What kind of work is in those records?</h3>
+      <p class="why">Specialist and regulated fields — clinical, legal, finance, niche logistics — command a multiple of generic data. <strong>Complete workflow chains</strong> (a ticket followed from open to resolution, a project start to finish) are especially valuable. Ongoing sales/transaction data opens a separate, recurring route.</p>
+      <fieldset>
+      <div class="f"><label class="q" for="domain">Line of work</label>
+      <select id="domain">
+        <option value="specialist">Regulated / specialist (clinical, legal, finance, niche logistics)</option>
+        <option value="standard" selected>Standard business</option>
+        <option value="generic">Generic / commodity</option>
+      </select></div>
+      <label class="chk" style="margin-top:12px"><input type="checkbox" id="workflows"> Complete workflow chains exist (ticket→resolution, full project lifecycles)</label>
+      <label class="chk"><input type="checkbox" id="txflow"> E-commerce, POS or transaction flow (ongoing sales data)</label>
+      </fieldset>
+    </section>
+
+    <section class="step" data-title="Rights check">
+      <h3>Last one — a quick rights check.</h3>
+      <p class="why">Being straight here <strong>protects you</strong>. None of these automatically disqualify you — they shape which buyers we'd approach and keep you clear of legal trouble. Everything is licensed de-identified either way; EU/UK data just needs a specialist review before anyone can quote it.</p>
+      <fieldset>
+      <label class="chk"><input type="checkbox" id="thirdparty"> Significant third-party confidential material (client files under NDA, vendor data)</label>
+      <label class="chk"><input type="checkbox" id="calls"> Call recordings made <em>without</em> AI-training consent</label>
+      <label class="chk"><input type="checkbox" id="pii"> Customer personal info that can't be cleanly de-identified</label>
+      <label class="chk"><input type="checkbox" id="eu"> EU/UK customers or contacts appear in the data</label>
+      </fieldset>
+    </section>
+
+    <div class="wiznav">
+      <button type="button" class="sec" id="backBtn" onclick="stepBack()">Back</button>
+      <button type="button" id="nextBtn" onclick="stepNext()">Continue</button>
+    </div>
+  </div>
   </form>
 
   <div class="card" id="result">
@@ -156,6 +210,7 @@
     <div class="range" id="range"></div>
     <div id="explain" style="color:var(--sub);font-size:.95rem"></div>
     <div id="flags"></div>
+    <button type="button" class="sec" onclick="editAnswers()">Edit my answers</button>
   </div>
 
   <div class="card" id="interest">
@@ -250,6 +305,43 @@ function readAnswers() {
     thirdparty: g('thirdparty').checked, calls: g('calls').checked,
     pii: g('pii').checked, eu: g('eu').checked
   };
+}
+
+/* ---- step wizard ---- */
+var wizStep = -1, wizSteps = null;
+function wizEls() { return wizSteps || (wizSteps = Array.prototype.slice.call(document.querySelectorAll('#wizard .step'))); }
+function startWizard() {
+  document.getElementById('estBtn').style.display = 'none';
+  document.getElementById('wizard').style.display = 'block';
+  ['result','interest','codeout'].forEach(function (id) { document.getElementById(id).style.display = 'none'; });
+  showWizStep(0);
+}
+function showWizStep(i) {
+  var steps = wizEls();
+  wizStep = i;
+  steps.forEach(function (s, j) { s.classList.toggle('active', j === i); });
+  document.getElementById('backBtn').style.visibility = i === 0 ? 'hidden' : 'visible';
+  document.getElementById('nextBtn').textContent = i === steps.length - 1 ? 'See my estimate' : 'Continue';
+  document.getElementById('progBar').style.width = ((i + 1) / steps.length * 100) + '%';
+  document.getElementById('progText').textContent = (i + 1) + ' of ' + steps.length + ' · ' + steps[i].getAttribute('data-title');
+  document.getElementById('wizard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function stepBack() { if (wizStep > 0) showWizStep(wizStep - 1); }
+function stepNext() {
+  var steps = wizEls();
+  var sizeErr = document.getElementById('sizeErr');
+  if (wizStep === 1) {
+    var ok = (+document.getElementById('employees').value > 0) && document.getElementById('years').value !== '';
+    sizeErr.style.display = ok ? 'none' : 'block';
+    if (!ok) return;
+  }
+  if (wizStep < steps.length - 1) showWizStep(wizStep + 1);
+  else { document.getElementById('wizard').style.display = 'none'; runEstimate(); }
+}
+function editAnswers() {
+  ['result','interest','codeout'].forEach(function (id) { document.getElementById(id).style.display = 'none'; });
+  document.getElementById('wizard').style.display = 'block';
+  showWizStep(0);
 }
 
 function runEstimate() {
