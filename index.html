@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>What is your business's data worth? — ALTR</title>
 <meta name="description" content="AI companies license real businesses' work records. Get a free 2-minute indicative estimate — no commitment, nothing sent until you say so.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,14 +10,19 @@
 <style>
   :root { --ink:#1c1117; --sub:#655a60; --line:#eee3e8; --accent:#b8336a; --accent-ink:#6b1d3e; --accent2:#fdf2f7; --warn:#92400e; --warnbg:#fffbeb; --ground:#fbf7f8; }
   * { box-sizing: border-box; }
-  body { margin:0; font-family:"DM Sans", Inter, system-ui, sans-serif; color:var(--ink); background:var(--ground); font-size:16px; line-height:1.5; }
-  .wrap { max-width:640px; margin:0 auto; padding:28px 20px 96px; }
+  body { margin:0; font-family:"DM Sans", Inter, system-ui, sans-serif; color:var(--ink); background:var(--ground); font-size:16px; line-height:1.5; -webkit-tap-highlight-color:transparent; }
+  /* safe areas: keep content clear of the notch (landscape) and home indicator */
+  .wrap { max-width:640px; margin:0 auto;
+    padding:28px 20px calc(96px + env(safe-area-inset-bottom, 0px));
+    padding-left:calc(20px + env(safe-area-inset-left, 0px));
+    padding-right:calc(20px + env(safe-area-inset-right, 0px)); }
+  @media (max-width: 360px) { .wrap { padding-left:calc(14px + env(safe-area-inset-left, 0px)); padding-right:calc(14px + env(safe-area-inset-right, 0px)); } }
   header.site { display:flex; align-items:center; gap:10px; margin-bottom:28px; }
   header.site svg { width:22px; height:22px; }
   header.site .name { font-weight:700; font-size:15px; }
   header.site .name span { display:block; font-size:12px; color:var(--sub); font-weight:400; }
   .refbar { display:none; background:var(--accent2); color:var(--accent-ink); border:1px solid var(--line); border-radius:8px; padding:9px 14px; font-size:.9rem; margin-bottom:20px; }
-  h1 { font-size:1.85rem; line-height:1.18; letter-spacing:-0.02em; margin:0 0 10px; font-weight:700; }
+  h1 { font-size:clamp(1.5rem, 4.4vw + .8rem, 1.85rem); line-height:1.18; letter-spacing:-0.02em; margin:0 0 10px; font-weight:700; }
   .tag { color:var(--sub); margin:0 0 30px; }
   h2 { font-size:1.05rem; margin:34px 0 10px; }
   .steps { counter-reset:s; padding:0; margin:0 0 6px; list-style:none; }
@@ -30,12 +35,15 @@
   label.q { display:block; margin:13px 0 5px; }
   select, input[type=number], input[type=text], input[type=email], input[type=tel] { font:inherit; padding:10px 12px; border:1px solid var(--line); border-radius:8px; background:#fff; width:100%; max-width:340px; }
   select:focus, input:focus, textarea:focus { outline:none; border-color:var(--accent); }
-  .chk { display:block; margin:8px 0; font-size:.95rem; }
-  .chk input { margin-right:8px; accent-color:var(--accent); }
+  /* checkbox rows as full-width touch targets (~44px incl. spacing) */
+  .chk { display:flex; align-items:flex-start; gap:10px; margin:2px 0; padding:9px 0; font-size:.95rem; cursor:pointer; border-radius:6px; }
+  .chk:active { background:var(--accent2); }
+  .chk input { width:19px; height:19px; margin:1px 0 0; flex:none; accent-color:var(--accent); }
   button { font-family:inherit; font-size:1.05rem; font-weight:700; letter-spacing:.01em;
     background:linear-gradient(180deg, #c93e79, #a82c60); color:#fff; border:none; border-radius:10px;
     padding:16px 32px; cursor:pointer; margin-top:24px; display:block; width:100%; max-width:380px;
     box-shadow:0 1px 2px rgba(107,29,62,.3), 0 6px 16px rgba(184,51,106,.25);
+    min-height:52px; touch-action:manipulation;
     transition:transform .12s ease, box-shadow .12s ease, filter .12s ease; }
   button:hover { transform:translateY(-1px); filter:brightness(1.06); box-shadow:0 2px 4px rgba(107,29,62,.3), 0 10px 22px rgba(184,51,106,.3); }
   button:active { transform:translateY(0); box-shadow:0 1px 2px rgba(107,29,62,.3), 0 3px 8px rgba(184,51,106,.22); }
@@ -65,7 +73,7 @@
   .step { display:none; }
   .step.active { display:block; animation:stepin .28s ease; }
   @keyframes stepin { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
-  .step h3 { font-size:1.4rem; line-height:1.2; letter-spacing:-0.015em; margin:22px 0 8px; }
+  .step h3 { font-size:clamp(1.2rem, 3.6vw + .5rem, 1.4rem); line-height:1.2; letter-spacing:-0.015em; margin:22px 0 8px; }
   .why { color:var(--sub); font-size:.96rem; line-height:1.55; margin:0 0 4px; }
   .step fieldset { border-top:0; padding-top:14px; }
   .progress-wrap { display:flex; align-items:center; gap:12px; margin-top:28px; }
