@@ -58,6 +58,25 @@
   .trust li { display:inline-flex; align-items:center; gap:7px; background:#fff; border:1px solid var(--line); border-radius:999px; padding:7px 13px 7px 10px; font-size:.82rem; font-weight:500; color:var(--ink); }
   .trust li::before { content:""; width:15px; height:15px; flex:none; border-radius:50%;
     background:var(--accent-soft, #fdf2f7) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.6 6.8 11 12 5.4' fill='none' stroke='%23b8336a' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/11px no-repeat; }
+  .market { font-size:.8rem; color:var(--sub); margin:12px 0 0; }
+  /* eligibility tiers */
+  .tiers { border-top:1px solid var(--line); }
+  .tier { display:flex; flex-wrap:wrap; gap:2px 12px; align-items:baseline; padding:9px 0; border-bottom:1px solid var(--line); }
+  .t-size { font-weight:600; flex:1 1 100%; }
+  .t-band { color:var(--accent-ink, #6b1d3e); font-weight:700; font-size:.9rem; }
+  .t-note { color:var(--sub); font-size:.85rem; }
+  .q-foot { color:var(--sub); font-size:.82rem; margin:12px 0 0; line-height:1.55; }
+  @media (min-width: 560px) { .t-size { flex:0 0 46%; } }
+  /* de-identification before/after */
+  .deid { display:grid; gap:12px; }
+  @media (min-width: 560px) { .deid { grid-template-columns:1fr 1fr; } }
+  .deid > div { background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+  .deid h4 { margin:0 0 8px; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); }
+  .deid ul { list-style:none; margin:0; padding:0; }
+  .deid li { padding:5px 0 5px 24px; position:relative; font-size:.92rem; }
+  .deid .keep li::before { content:"✓"; position:absolute; left:2px; color:var(--accent); font-weight:700; }
+  .deid .strip li::before { content:"✕"; position:absolute; left:2px; color:#c4242a; font-weight:700; }
+  .deid .strip li { color:var(--sub); text-decoration:line-through; text-decoration-color:rgba(196,36,42,.35); }
   /* closing CTA card — same action as the hero button, different voice */
   .ctacard { background:linear-gradient(135deg, #fdf2f7, #f8dbe8); border:1px solid var(--line); border-radius:14px; padding:20px 20px 22px; margin-top:28px; }
   .ctacard p { margin:0; line-height:1.5; }
@@ -173,6 +192,7 @@
     <li>Nothing leaves your browser until you send it</li>
     <li>No commitment — you can say no</li>
   </ul>
+  <p class="market">Published buyer programs run from ~$10K to $3M+ per license. Estimates are indicative — never an offer.</p>
 
   <button id="estBtnHero" onclick="startWizard()">Get my free estimate</button>
   </div>
@@ -187,12 +207,22 @@
 
   <h2>What tends to qualify</h2>
   <div class="qualify">
-    Buyers pay most for operating businesses with <strong>3+ years of digital records</strong> — email, tickets, CRM, documents, code, industry systems. Larger teams command more, but:
-    <ul>
-      <li>Smaller or newer businesses still have routes — we'll tell you which.</li>
-      <li>Closed or winding-down businesses are often the <em>fastest</em> deals.</li>
-      <li>Everything is licensed de-identified. You keep ownership. You can always say no.</li>
-    </ul>
+    <p style="margin:0 0 10px">Buyers pay most for <strong>3+ years of digital records</strong> — email, tickets, CRM, documents, code, industry systems. Where businesses tend to land, by peak team size:</p>
+    <div class="tiers">
+      <div class="tier"><span class="t-size">20–75 people · 3+ yrs</span><span class="t-band">$100K–$500K band</span><span class="t-note">core buyer sweet spot</span></div>
+      <div class="tier"><span class="t-size">75–250 people</span><span class="t-band">$500K–$1.5M band</span><span class="t-note">top-tier programs</span></div>
+      <div class="tier"><span class="t-size">250+ people</span><span class="t-band">$1M–$3M band</span><span class="t-note">largest published deals</span></div>
+      <div class="tier"><span class="t-size">10–19 people</span><span class="t-band">$10K–$100K band</span><span class="t-note">smaller buyers</span></div>
+      <div class="tier"><span class="t-size">Under 10 · or &lt;3 yrs of records</span><span class="t-band">alternative routes</span><span class="t-note">or a 12-month recheck</span></div>
+      <div class="tier"><span class="t-size">Closed business · any size</span><span class="t-band">archive buyers</span><span class="t-note">often the fastest deals</span></div>
+    </div>
+    <p class="q-foot">Peak headcount counts, even if you're smaller now. Bands are indicative, drawn from published buyer programs — never an offer. Everything is licensed de-identified, you keep ownership, and you can say no at any point.</p>
+  </div>
+
+  <h2>Everything is de-identified first</h2>
+  <div class="deid">
+    <div><h4>What buyers see</h4><ul class="keep"><li>How work flowed — tickets opened → resolved</li><li>Process docs and project timelines</li><li>Patterns across years of operations</li></ul></div>
+    <div><h4>What gets stripped</h4><ul class="strip"><li>Names, emails, phone numbers</li><li>Customer and employee identities</li><li>Account numbers and anything personal</li></ul></div>
   </div>
   </div>
 
@@ -437,8 +467,14 @@ function runEstimate() {
   var head = document.getElementById('rangehead'), range = document.getElementById('range');
   var explain = document.getElementById('explain'), flags = document.getElementById('flags');
   res.style.display = 'block';
+  /* page-side notes: recurring-value angles for operating businesses (Centific refresh program, alt-data feeds) */
+  var extraNotes = [];
+  if (!lastEst.blocked && lastX.status === 'operating')
+    extraNotes.push('Operating business: some buyers also pay for periodic data refreshes — potential recurring revenue over the next 24 months. We review this on the call.');
+  if (!lastEst.blocked && lastX.txflow)
+    extraNotes.push('Your ongoing transaction flow may also fit recurring data-feed licensing — paid yearly rather than one-off.');
   flags.innerHTML = lastEst.flags.map(function (x) { return '<div class="flag">⚠️ ' + x + '</div>'; }).join('') +
-                    lastEst.notes.map(function (x) { return '<div class="note">' + x + '</div>'; }).join('');
+                    lastEst.notes.concat(extraNotes).map(function (x) { return '<div class="note">' + x + '</div>'; }).join('');
   if (lastEst.blocked) {
     head.textContent = 'One thing to resolve first';
     range.textContent = '—';
