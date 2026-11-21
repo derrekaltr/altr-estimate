@@ -34,8 +34,30 @@
   header.site .name { font-weight:800; font-size:23px; letter-spacing:.08em; line-height:1.1; }
   header.site .name span { display:block; font-size:10.5px; color:var(--sub); font-weight:600; letter-spacing:.18em; text-transform:uppercase; margin-top:3px; }
   .refbar { display:none; background:var(--accent2); color:var(--accent-ink); border:1px solid var(--line); border-radius:8px; padding:9px 14px; font-size:.9rem; margin-bottom:20px; }
-  h1 { font-size:clamp(1.5rem, 4.4vw + .8rem, 1.85rem); line-height:1.18; letter-spacing:-0.02em; margin:0 0 10px; font-weight:700; }
+  .kicker { display:flex; align-items:center; gap:10px; font-size:.72rem; font-weight:700; letter-spacing:.17em; text-transform:uppercase; color:var(--accent); margin:2px 0 12px; }
+  .kicker::before { content:""; width:22px; height:2px; background:var(--accent); border-radius:2px; }
+  h1 { margin:0 0 20px; letter-spacing:-0.02em; }
+  .h1-lede { display:block; font-size:clamp(1.02rem, 2.6vw + .4rem, 1.2rem); font-weight:600; color:var(--sub); line-height:1.4; margin-bottom:8px; letter-spacing:-0.01em; }
+  .h1-hero { display:block; font-size:clamp(1.8rem, 6vw + .6rem, 2.4rem); font-weight:800; line-height:1.1; }
+  .hl { font-style:normal; background:linear-gradient(100deg, #f8dbe8 0%, #fdd3e4 100%); border-radius:8px; padding:0 .14em; box-decoration-break:clone; -webkit-box-decoration-break:clone; }
   .tag { color:var(--sub); margin:0 0 30px; }
+  /* hero strip: the bid-board signature, miniaturized */
+  .herostrip { background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px 16px 12px; margin:0 0 16px; box-shadow:0 1px 3px rgba(107,29,62,.06); }
+  .hs-head { display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:4px; }
+  .hs-head span:first-child { font-weight:700; font-size:.92rem; }
+  .hs-tag { font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--sub); }
+  .herostrip svg { width:100%; height:auto; display:block; font-family:inherit; }
+  .hs-legend { display:flex; flex-wrap:wrap; gap:6px 16px; font-size:.74rem; color:var(--sub); margin-top:6px; }
+  .hs-legend span { display:inline-flex; align-items:center; gap:6px; }
+  .sw { display:inline-block; }
+  .sw.band { width:18px; height:8px; border-radius:4px; background:#f8dbe8; }
+  .sw.dot { width:9px; height:9px; border-radius:50%; background:#fff; border:1.6px solid var(--accent); }
+  .sw.lead { width:11px; height:11px; border-radius:50%; background:var(--accent); }
+  /* trust pills */
+  .trust { list-style:none; display:flex; flex-wrap:wrap; gap:8px; padding:0; margin:0 0 4px; }
+  .trust li { display:inline-flex; align-items:center; gap:7px; background:#fff; border:1px solid var(--line); border-radius:999px; padding:7px 13px 7px 10px; font-size:.82rem; font-weight:500; color:var(--ink); }
+  .trust li::before { content:""; width:15px; height:15px; flex:none; border-radius:50%;
+    background:var(--accent-soft, #fdf2f7) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.6 6.8 11 12 5.4' fill='none' stroke='%23b8336a' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/11px no-repeat; }
   h2 { font-size:1.05rem; margin:34px 0 10px; }
   .steps { counter-reset:s; padding:0; margin:0 0 6px; list-style:none; }
   .steps li { counter-increment:s; display:flex; gap:12px; margin:10px 0; }
@@ -99,7 +121,9 @@
   /* ---- desktop: wider column, form fields two-across (layout only, same look) ---- */
   @media (min-width: 900px) {
     .wrap { max-width:920px; padding:48px 48px 120px; }
-    h1 { font-size:2.5rem; }
+    .h1-lede { font-size:1.25rem; }
+    .h1-hero { font-size:3rem; }
+    .herostrip { max-width:560px; }
     .tag, .steps, .qualify, details, .fine, .refbar { max-width:700px; }
     fieldset { display:grid; grid-template-columns:1fr 1fr; gap:2px 48px; align-items:start; }
     legend, fieldset > label.q { grid-column:1 / -1; }
@@ -119,8 +143,35 @@
 
   <div class="refbar" id="refbar"></div>
 
-  <h1>AI companies license real businesses' work records. Find out what yours could be worth.</h1>
-  <p class="tag">Free · about 2 minutes · no commitment. Your answers stay in your browser — nothing is sent anywhere until you choose to send it.</p>
+  <div id="heroSecs">
+  <p class="kicker">For business owners · free estimate</p>
+  <h1>
+    <span class="h1-lede">AI companies license real businesses' work records.</span>
+    <span class="h1-hero">Find out what yours <em class="hl">could be worth</em>.</span>
+  </h1>
+
+  <div class="herostrip" role="img" aria-label="Illustration: competing buyer indications across an estimate range">
+    <div class="hs-head"><span>Buyers compete on your range</span><span class="hs-tag">illustrative</span></div>
+    <svg viewBox="0 0 320 54">
+      <rect x="10" y="26" width="300" height="10" rx="5" fill="#f8dbe8"/>
+      <text x="113" y="14" text-anchor="middle" font-size="10.5" font-weight="600" fill="#655a60" font-family="inherit">$220K</text>
+      <circle cx="113" cy="31" r="5" fill="#ffffff" stroke="#b8336a" stroke-width="1.6"/>
+      <text x="196" y="14" text-anchor="middle" font-size="10.5" font-weight="600" fill="#655a60" font-family="inherit">$410K</text>
+      <circle cx="196" cy="31" r="5" fill="#ffffff" stroke="#b8336a" stroke-width="1.6"/>
+      <text x="258" y="14" text-anchor="middle" font-size="10.5" font-weight="700" fill="#6b1d3e" font-family="inherit">$450K</text>
+      <circle cx="258" cy="31" r="6.5" fill="#b8336a"/>
+    </svg>
+    <div class="hs-legend"><span><i class="sw band"></i>your estimate band</span><span><i class="sw dot"></i>buyer indications</span><span><i class="sw lead"></i>leading bid</span></div>
+  </div>
+
+  <ul class="trust">
+    <li>Free · about 2 minutes</li>
+    <li>Nothing leaves your browser until you send it</li>
+    <li>No commitment — you can say no</li>
+  </ul>
+
+  <button id="estBtnHero" onclick="startWizard()">Get my free estimate</button>
+  </div>
 
   <div id="introSecs">
   <h2>How it works</h2>
@@ -334,7 +385,8 @@ function wizEls() { return wizSteps || (wizSteps = Array.prototype.slice.call(do
 function startWizard() {
   document.getElementById('estBtn').style.display = 'none';
   document.getElementById('wizard').style.display = 'block';
-  /* a step should be the only thing on screen — intro and FAQ come back with the estimate */
+  /* a step should be the only thing on screen — hero/intro/FAQ leave; FAQ returns with the estimate */
+  document.getElementById('heroSecs').style.display = 'none';
   document.getElementById('introSecs').style.display = 'none';
   document.getElementById('faqSecs').style.display = 'none';
   ['result','interest','codeout'].forEach(function (id) { document.getElementById(id).style.display = 'none'; });
