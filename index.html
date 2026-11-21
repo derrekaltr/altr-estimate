@@ -58,6 +58,10 @@
   .trust li { display:inline-flex; align-items:center; gap:7px; background:#fff; border:1px solid var(--line); border-radius:999px; padding:7px 13px 7px 10px; font-size:.82rem; font-weight:500; color:var(--ink); }
   .trust li::before { content:""; width:15px; height:15px; flex:none; border-radius:50%;
     background:var(--accent-soft, #fdf2f7) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.6 6.8 11 12 5.4' fill='none' stroke='%23b8336a' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/11px no-repeat; }
+  /* closing CTA card — same action as the hero button, different voice */
+  .ctacard { background:linear-gradient(135deg, #fdf2f7, #f8dbe8); border:1px solid var(--line); border-radius:14px; padding:20px 20px 22px; margin-top:28px; }
+  .ctacard p { margin:0; line-height:1.5; }
+  .ctacard button { margin-top:14px; }
   h2 { font-size:1.05rem; margin:34px 0 10px; }
   .steps { counter-reset:s; padding:0; margin:0 0 6px; list-style:none; }
   .steps li { counter-increment:s; display:flex; gap:12px; margin:10px 0; }
@@ -192,7 +196,10 @@
   </div>
   </div>
 
-  <button id="estBtn" onclick="startWizard()">Get my free estimate</button>
+  <div class="ctacard" id="ctaCard">
+    <p><strong>Ready to see your number?</strong><br>Six quick questions. No contact details needed for the estimate itself.</p>
+    <button id="estBtn" onclick="startWizard()">Start the 2-minute estimate</button>
+  </div>
 
   <form id="estform" onsubmit="return false">
   <div id="wizard" style="display:none">
@@ -383,7 +390,7 @@ function readAnswers() {
 var wizStep = -1, wizSteps = null;
 function wizEls() { return wizSteps || (wizSteps = Array.prototype.slice.call(document.querySelectorAll('#wizard .step'))); }
 function startWizard() {
-  document.getElementById('estBtn').style.display = 'none';
+  document.getElementById('ctaCard').style.display = 'none';
   document.getElementById('wizard').style.display = 'block';
   /* a step should be the only thing on screen — hero/intro/FAQ leave; FAQ returns with the estimate */
   document.getElementById('heroSecs').style.display = 'none';
